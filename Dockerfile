@@ -24,4 +24,4 @@ ENV PORT=10000
 EXPOSE 10000
 
 # Lancer l'application
-CMD ["node", "popkid.js"]
+CMD ["node", "bilal.js"]
