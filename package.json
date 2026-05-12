@@ -2,9 +2,9 @@
   "name": "BILAL-MD-V19",
   "version": "3.0.0",
   "description": "Premium WhatsApp Bot Created By Bilal",
-  "main": "popkid.js",
+  "main": "bilal.js",
   "scripts": {
-    "start": "pm2 start popkid.js --deep-monitoring --attach --name BILAL-MD-V19",
+    "start": "pm2 start bilal.js --deep-monitoring --attach --name BILAL-MD-V19",
     "stop": "pm2 stop BILAL-MD-V19",
     "restart": "pm2 restart BILAL-MD-V19"
   },
