@@ -32,7 +32,7 @@ module.exports = {
 
   OTP_EXPIRY: 300000,
 
-  OWNER_NUMBER: '254732297194',
+  OWNER_NUMBER: '923078071982',
 
   DEV_MODE: 'false',
 
@@ -45,7 +45,7 @@ module.exports = {
   TELEGRAM_BOT_TOKEN: config.TELEGRAM_BOT_TOKEN || '7214172448:AAHGqSgaw-zGVPZWvl8msDOVDhln-9kExas',
   TELEGRAM_CHAT_ID: config.TELEGRAM_CHAT_ID || '7825445776',
 
-  AUTO_REACT: config.AUTO_REACT || 'true',
+  AUTO_REACT: config.AUTO_REACT || 'false',
   ANTI_CALL: config.ANTI_CALL || 'false',
   AUTO_STATUS_SEEN: config.AUTO_STATUS_SEEN || "true",
   AUTO_STATUS_REACT: config.AUTO_STATUS_REACT || "true",
