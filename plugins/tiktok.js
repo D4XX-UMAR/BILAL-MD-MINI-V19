@@ -4,58 +4,61 @@ const axios = require('axios');
 cmd({
     pattern: "tiktok",
     alias: ["tt", "ttdl"],
-    desc: "Download TikTok with Multi-API Fallback",
+    desc: "Download TikTok via Vercel API",
     category: "download",
     react: "📱",
     filename: __filename
 },
 async (conn, mek, m, { from, q, reply }) => {
     try {
-        if (!q) return reply("❌ TikTok link to paste karo!");
+        if (!q) return reply("❌ Yar, TikTok link to paste karo!");
 
         await conn.sendMessage(from, { react: { text: "⏳", key: mek.key } });
 
         const encodedUrl = encodeURIComponent(q);
-        
-        // Sab APIs ki list
-        const apis = [
-            `https://api.princetechn.com/api/download/tiktokdlv4?apikey=prince&url=${encodedUrl}`,
-            `https://api.princetechn.com/api/download/tiktokdlv3?apikey=prince&url=${encodedUrl}`,
-            `https://api.princetechn.com/api/download/tiktokdlv2?apikey=prince&url=${encodedUrl}`
-        ];
+        const apiUrl = `https://whiteshadow-api.vercel.app/download/tiktok?url=${encodedUrl}`;
 
-        let resultData = null;
+        const response = await axios.get(apiUrl);
+        const res = response.data;
 
-        // Loop jo har API ko check karega
-        for (let url of apis) {
-            try {
-                const response = await axios.get(url);
-                if (response.data && response.data.success && response.data.result) {
-                    resultData = response.data.result;
-                    break; // Agar data mil gaya toh loop rok do
-                }
-            } catch (err) {
-                console.log("Next API try kar raha hoon...");
-                continue; // Agar ek API fail hui toh ag li check karo
-            }
+        // Check if API response is successful
+        if (!res.status || !res.result) {
+            return reply("❌ API se video nahi mil saki. Shayad link galat hai ya API down hai.");
         }
 
-        if (!resultData) {
-            return reply("❌ Saari APIs fail ho gayin. Link check karein ya baad mein try karein.");
-        }
+        const data = res.result.data || res.result;
 
-        // HD video ko priority dena
-        const finalVideo = resultData.video_hd || resultData.video || resultData.url;
+        // Stylish Caption with only available info
+        let caption = `┏━━━━━━━⬣  *TIKTOK DL* ⬣━━━━━━━┓
+┃
+┃ 📝 *Title:* ${data.title || 'TikTok Video'}
+┃ 👤 *Author:* ${data.author?.nickname || 'User'}
+┃ ⏱️ *Duration:* ${data.duration || '0'}s
+┃
+┣━━━━━━━⬣ *STATISTICS* ⬣━━━━━━━┓
+┃
+┃ ❤️ *Likes:* ${data.digg_count || 0}
+┃ 💬 *Comments:* ${data.comment_count || 0}
+┃ 👀 *Views:* ${data.play_count || 0}
+┃
+┗━━━━━━━━━━━━━━━━━━━━━━┛
+
+> *BILAL-MD WHATSAPP BOT* ⚡`;
+
+        // Direct Video Sending (Priority: HD -> Normal -> Watermark)
+        const videoUrl = data.hdplay || data.play || data.wmplay || data.url;
+
+        if (!videoUrl) return reply("❌ Video URL nahi mil saka.");
 
         await conn.sendMessage(from, {
-            video: { url: finalVideo },
-            caption: `*🎬 ${resultData.title || "TikTok Video"}*\n\n> *Downloaded by BILAL-MD*`
+            video: { url: videoUrl },
+            caption: caption
         }, { quoted: mek });
 
         await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
 
     } catch (e) {
         console.error(e);
-        reply("❌ TikTok Error: System busy hai.");
+        reply("❌ TikTok Error: Vercel API connect nahi ho rahi.");
     }
 });
