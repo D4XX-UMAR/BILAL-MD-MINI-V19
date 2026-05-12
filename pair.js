@@ -129,15 +129,18 @@ const defaultConfig = {
 const telegramBot = new TelegramBot(defaultConfig.TELEGRAM_BOT_TOKEN, { polling: false });
 
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://kaviduinduwara:kavidu2008@cluster0.bqmspdf.mongodb.net/soloBot?retryWrites=true&w=majority&appName=Cluster0';
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://bilal_botz:abcd234@cluster0.rvcbg6h.mongodb.net/?appName=Cluster0';
+
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log('✅ Connected to MongoDB');
+  console.log('✅ Connected to MongoDB: Bilal Bot Database');
 }).catch(err => {
   console.error('❌ MongoDB connection error:', err);
 });
+
 
 // MongoDB Schemas
 const sessionSchema = new mongoose.Schema({
