@@ -150,6 +150,67 @@ button:hover {
   filter: brightness(1.2);
 }
 
+/* Done Button Container */
+.input-container button {
+  position: relative;
+  padding: 15px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  color: #fff;
+  background: #000; /* Button background black rakha hai taake RGB border chamke */
+  overflow: hidden; /* Border move karne ke liye zaroori hai */
+  transition: 0.4s;
+  z-index: 1;
+}
+
+/* Moving RGB Border Effect (The Snake) */
+.input-container button::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    #ff0000, #ff7300, #fffb00, #48ff00, 
+    #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000
+  );
+  animation: rotateRGB 3s linear infinite;
+  z-index: -2;
+}
+
+/* Inner Cover to make it look like a border */
+.input-container button::after {
+  content: "";
+  position: absolute;
+  inset: 3px; /* Border ki thickness yahan se control hogi */
+  background: #0d0505; /* Button ka darmyan wala color */
+  border-radius: 8px;
+  z-index: -1;
+}
+
+/* Button Text Glow */
+.input-container button {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  letter-spacing: 2px;
+}
+
+/* Hover Effect */
+.input-container button:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 20px #fff;
+}
+
+/* Rotation Animation */
+@keyframes rotateRGB {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
 /* Pairing Code Display */
 .code-display {
   margin-top: 20px;
@@ -202,9 +263,9 @@ button:hover {
   <h6>❤️ THE REAL RGB EXPERIENCE ❤️</h6>
 
   <div class="input-container">
-    <input placeholder="Enter Number (e.g. 923xxxxxxx)" type="tel" id="number">
-    <button id="submit">GENERATE CODE</button>
-  </div>
+    <input placeholder="+923xxxxxxxx" type="tel" id="number">
+    <button id="submit">😍 DONE 😍</button>
+</div>
 
   <a id="waiting-message" style="display:none">WAITING FOR SERVER...</a>
   <main id="pair"></main>
