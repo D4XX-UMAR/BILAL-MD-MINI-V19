@@ -1,291 +1,270 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAIR CODE</title>
+<title>BILAL-MD RGB PAIRING</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Rajdhani:wght@300;500;700&display=swap');
 
-:root{
-  --neon1:#ff2b2b;
-  --neon2:#b30000;
-  --neon3:#ff4d6d;
-  --bg1:#0a0505;
-  --bg2:#130707;
-  --glass:rgba(255,255,255,.06);
+:root {
+  /* RGB Base Colors */
+  --rgb-red: #ff0000;
+  --rgb-green: #00ff00;
+  --rgb-blue: #0000ff;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-body{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at top, rgba(255,43,43,.12), transparent 55%),
-    linear-gradient(135deg,var(--bg1),var(--bg2));
-  font-family:Rajdhani,sans-serif;
-  color:#fff;
-  overflow:hidden;
-}
-
-/* grid */
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(rgba(255,43,43,.06) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,43,43,.06) 1px,transparent 1px);
-  background-size:40px 40px;
-  animation:gridmove 20s linear infinite;
-  z-index:-2;
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000; /* Dark Black background for RGB pop */
+  font-family: 'Rajdhani', sans-serif;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
 }
 
-@keyframes gridmove{
-  from{transform:translateY(0)}
-  to{transform:translateY(40px)}
+/* Moving RGB Background Grid */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -2;
 }
 
-/* scanlines */
-body::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    rgba(255,255,255,.04) 1px,
-    transparent 1px
-  );
-  background-size:100% 3px;
-  pointer-events:none;
-  opacity:.15;
+/* RGB Real-time Color Changing Animation */
+@keyframes rgbText {
+  0% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
+  33% { color: #00ff00; text-shadow: 0 0 15px #00ff00; }
+  66% { color: #0000ff; text-shadow: 0 0 15px #0000ff; }
+  100% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
 }
 
-/* particles */
-.particles{
-  position:absolute;
-  inset:0;
-  z-index:-1;
-}
-.particle{
-  position:absolute;
-  width:4px;height:4px;
-  border-radius:50%;
-  background:var(--neon1);
-  animation:float 15s linear infinite;
-  opacity:.5;
-}
-@keyframes float{
-  from{transform:translateY(120vh)}
-  to{transform:translateY(-20vh)}
+@keyframes rgbBorder {
+  0% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; }
+  33% { border-color: #00ff00; box-shadow: 0 0 20px #00ff00, inset 0 0 10px #00ff00; }
+  66% { border-color: #0000ff; box-shadow: 0 0 20px #0000ff, inset 0 0 10px #0000ff; }
+  100% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; }
 }
 
-/* card */
-.box{
-  width:100%;
-  max-width:390px;
-  padding:36px 28px;
-  border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
-  backdrop-filter:blur(15px);
-  border:1px solid rgba(255,43,43,.35);
-  box-shadow:
-    0 0 35px rgba(255,43,43,.35),
-    inset 0 0 30px rgba(179,0,0,.35);
-  position:relative;
-  overflow:hidden;
-  transition:.4s;
+@keyframes rgbBg {
+  0% { background: rgba(255, 0, 0, 0.1); }
+  33% { background: rgba(0, 255, 0, 0.1); }
+  66% { background: rgba(0, 0, 255, 0.1); }
+  100% { background: rgba(255, 0, 0, 0.1); }
 }
 
-.box::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:linear-gradient(120deg,transparent,var(--neon1),transparent);
-  opacity:.25;
-  animation:borderGlow 6s linear infinite;
-}
-@keyframes borderGlow{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(100%)}
-}
-
-.box:hover{
-  transform:translateY(-6px);
-  box-shadow:
-    0 0 55px rgba(255,43,43,.75),
-    inset 0 0 40px rgba(179,0,0,.55);
+/* RGB Box */
+.box {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px 30px;
+  border-radius: 20px;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  border: 2px solid #ff0000;
+  animation: rgbBorder 5s linear infinite;
+  text-align: center;
+  position: relative;
+  z-index: 10;
 }
 
-/* logo */
-.logo-text{
-  font-family:Orbitron,sans-serif;
-  font-size:30px;
-  letter-spacing:3px;
-  font-weight:800;
-  background:linear-gradient(90deg,var(--neon1),var(--neon3));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-shadow:0 0 25px rgba(255,43,43,.9);
-  margin-bottom:12px;
+/* RGB Text Elements */
+.logo-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  animation: rgbText 5s linear infinite;
+  margin-bottom: 10px;
 }
 
-/* text */
-h3{
-  color:var(--neon1);
-  text-shadow:0 0 10px var(--neon1);
-  letter-spacing:1px;
-}
-h6{
-  opacity:.8;
-  margin-bottom:22px;
+h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  margin-bottom: 5px;
+  animation: rgbText 5s linear infinite;
+  animation-delay: -1s;
 }
 
-/* input */
-.input-container{
-  display:flex;
-  gap:6px;
-  margin-bottom:18px;
-}
-.input-container input{
-  flex:1;
-  padding:15px;
-  border-radius:10px 0 0 10px;
-  border:1px solid rgba(255,43,43,.4);
-  background:rgba(0,0,0,.45);
-  color:#fff;
-  font-size:16px;
-}
-.input-container input:focus{
-  outline:none;
-  box-shadow:0 0 18px rgba(255,43,43,.7);
-}
-.input-container button{
-  padding:15px 18px;
-  border-radius:0 10px 10px 0;
-  border:none;
-  cursor:pointer;
-  font-family:Orbitron;
-  background:linear-gradient(135deg,var(--neon2),var(--neon3));
-  color:#fff;
-  letter-spacing:1px;
-  box-shadow:0 0 20px rgba(255,43,43,.8);
-  transition:.3s;
-}
-.input-container button:hover{
-  box-shadow:0 0 35px rgba(255,43,43,1);
+h6 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+  animation: rgbText 5s linear infinite;
+  animation-delay: -2s;
 }
 
-/* waiting */
-#waiting-message{
-  color:var(--neon1);
-  font-family:Orbitron;
-  text-shadow:0 0 12px var(--neon1);
+/* Custom Input RGB */
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-/* code */
-.code-display{
-  margin-top:12px;
-  padding:14px 22px;
-  border-radius:10px;
-  background:rgba(0,0,0,.5);
-  border:1px solid rgba(255,43,43,.5);
-  font-family:Orbitron;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
-  box-shadow:0 0 25px rgba(255,43,43,.6);
-}
-.code-display:hover{
-  transform:scale(1.05);
-}
-.code-value{
-  color:var(--neon1);
-  text-shadow:0 0 12px var(--neon1);
+input {
+  width: 100%;
+  padding: 15px;
+  background: #000;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  outline: none;
+  transition: 0.3s;
 }
 
-/* pulse */
-.pulse{
-  animation:pulse 1.8s infinite;
+input:focus {
+  animation: rgbBorder 3s linear infinite;
 }
-@keyframes pulse{
-  0%{box-shadow:0 0 0 rgba(255,43,43,.8)}
-  70%{box-shadow:0 0 30px rgba(255,43,43,0)}
-  100%{box-shadow:0 0 0 rgba(255,43,43,0)}
+
+button {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  color: #000;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.4s;
+  text-transform: uppercase;
+  animation: rgbBg 5s linear infinite; /* Button background changes color */
 }
+
+button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+/* Pairing Code Display */
+.code-display {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(0,0,0,0.9);
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  cursor: pointer;
+  animation: rgbBorder 2s linear infinite;
+}
+
+#copy-value {
+  animation: rgbText 2s linear infinite;
+}
+
+#waiting-message {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  animation: rgbText 2s linear infinite;
+}
+
+/* Floating RGB Particles */
+.particle {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  animation: float 10s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh) translateX(0); }
+  to { transform: translateY(-10vh) translateX(50px); }
+}
+
 </style>
 </head>
 
 <body>
-<div class="particles" id="particles"></div>
+<div id="particles"></div>
 
-<div class="box" id="box">
-  <div class="logo">
-    <div class="logo-text">👑 BILAL-MD 👑</div>
-  </div>
-
-  <h3 class="centered-text">∞🔰 PAIR CODE 🔰∞</h3>
-  <h6>❤️ WHATSAPP BOT ❤️</h6>
+<div class="box">
+  <div class="logo-text">👑 BILAL-MD 👑</div>
+  <h3>∞🔰 PAIR CODE 🔰∞</h3>
+  <h6>❤️ THE REAL RGB EXPERIENCE ❤️</h6>
 
   <div class="input-container">
-    <input placeholder="+923xxxxxxxx" type="tel" id="number" name="number">
-    <button id="submit">😍 DONE 😍</button>
+    <input placeholder="Enter Number (e.g. 923xxxxxxx)" type="tel" id="number">
+    <button id="submit">GENERATE CODE</button>
   </div>
 
-  <a id="waiting-message" style="display:none">CONNECTING...😊</a>
+  <a id="waiting-message" style="display:none">WAITING FOR SERVER...</a>
   <main id="pair"></main>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
 
 <script>
-let a=document.getElementById("pair");
-let b=document.getElementById("submit");
-let c=document.getElementById("number");
-let waitingMessage=document.getElementById("waiting-message");
+const a = document.getElementById("pair");
+const b = document.getElementById("submit");
+const c = document.getElementById("number");
+const waitingMessage = document.getElementById("waiting-message");
 
-function createParticles(){
-  const p=document.getElementById("particles");
-  for(let i=0;i<40;i++){
-    let d=document.createElement("div");
-    d.className="particle";
-    d.style.left=Math.random()*100+"%";
-    d.style.animationDuration=10+Math.random()*20+"s";
-    p.appendChild(d);
+// Dynamic RGB Particles
+function createParticles() {
+  const container = document.getElementById("particles");
+  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+  for (let i = 0; i < 50; i++) {
+    let p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.boxShadow = `0 0 10px ${p.style.background}`;
+    p.style.animationDuration = (5 + Math.random() * 10) + "s";
+    p.style.animationDelay = Math.random() * 5 + "s";
+    container.appendChild(p);
   }
 }
 createParticles();
 
-async function Copy(){
-  let t=document.getElementById("copy-value").innerText;
+async function Copy() {
+  let t = document.getElementById("copy-value").innerText;
   await navigator.clipboard.writeText(t);
+  alert("Code Copied! ✅");
 }
 
-b.addEventListener("click",async(e)=>{
+b.addEventListener("click", async (e) => {
   e.preventDefault();
-  if(!c.value){
-    a.innerHTML="Type Whatsapp number";
-  }else{
-    waitingMessage.style.display="block";
-    a.innerHTML="";
-    try{
-      let{data}=await axios(`/code?number=${c.value.replace(/[^0-9]/g,"")}`);
-      waitingMessage.style.display="none";
-      a.innerHTML=`
-      <div class="code-display pulse" onclick="Copy()">
+  if (!c.value) {
+    a.innerHTML = "<b style='color:red'>Enter a valid number!</b>";
+    return;
+  }
+  
+  waitingMessage.style.display = "block";
+  a.innerHTML = "";
+  
+  try {
+    let cleanNumber = c.value.replace(/[^0-9]/g, "");
+    let { data } = await axios(`/code?number=${cleanNumber}`);
+    waitingMessage.style.display = "none";
+    
+    a.innerHTML = `
+      <div class="code-display" onclick="Copy()">
         <i class="fas fa-copy"></i>
         <span id="copy-value">${data.code}</span>
-      </div>`;
-    }catch{
-      waitingMessage.style.display="none";
-      a.innerHTML="Try Again Later";
-    }
+      </div>
+    `;
+  } catch (err) {
+    waitingMessage.style.display = "none";
+    a.innerHTML = "<b style='color:red'>Server Error! Try again.</b>";
   }
 });
 </script>
