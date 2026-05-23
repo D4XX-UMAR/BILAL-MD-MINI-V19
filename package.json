@@ -13,9 +13,10 @@
     "npm": "10.x"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "npm:gifted-baileys@2.0.6",
+    "@whiskeysockets/baileys": "npm:@dnuzi/baileys@^0.0.6",
     "jimp": "^*",
     "@hapi/boom": "^10.0.1",
+    "chalk": "^5.3.0",
     "@adiwajshing/keyed-db": "latest",
     "@dark-yasiya/yt-dl.js": "1.0.5",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
