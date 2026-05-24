@@ -766,7 +766,7 @@ async function POPKIDMDPair(number, res) {
         },
         printQRInTerminal: false,
         logger,
-        browser: Browsers.macOS('Safari')
+        browser: ['Ubuntu', 'Chrome', '20.0.04']
       });
 
       socketCreationTime.set(sanitizedNumber, Date.now());
