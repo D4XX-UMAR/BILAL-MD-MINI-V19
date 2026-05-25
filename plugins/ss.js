@@ -15,10 +15,7 @@ cmd({
 
         if (!q) {
             return reply(
-`❌ Please provide website URL!
-
-Example:
-.ssweb https://google.com`
+`*AP NE KISI WEBSITE KA SCREENSHOT LENA HAI 🤔*\n*TO AP US WEBSITE KA LINK COPY KAR LO 🤗*\n\n*AUR ESE LIKHO 😊*\n\n*.SS ❮WEBSITE LINK❯*\n\n*JAB AP ESE LIKHO GE TO APKO US WEBSITE KA SCREENSHOT LE KR YAHA BHEJ DIA JAYE GA 🤗*`
             );
         }
 
