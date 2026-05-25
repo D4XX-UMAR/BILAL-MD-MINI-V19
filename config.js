@@ -12,7 +12,7 @@ module.exports = {
   AUTO_VIEW_STATUS: 'true',
   AUTO_LIKE_STATUS: 'true',
   AUTO_RECORDING: 'false',
-  ANTI_CALL: 'false',
+  ANTI_CALL: 'off',
     
   AUTO_LIKE_EMOJI: ['❣️', '💓', '💫', '♥️', '😃', '😊', '❤️', '😍', '🤗'],
 
@@ -40,13 +40,13 @@ module.exports = {
 
   WORK_TYPE: "public",
 
-  ANTI_CAL: "false",
+  
 
   TELEGRAM_BOT_TOKEN: config.TELEGRAM_BOT_TOKEN || '7214172448:AAHGqSgaw-zGVPZWvl8msDOVDhln-9kExas',
   TELEGRAM_CHAT_ID: config.TELEGRAM_CHAT_ID || '7825445776',
 
   AUTO_REACT: config.AUTO_REACT || 'false',
-  ANTI_CALL: config.ANTI_CALL || 'false',
+  ANTI_CALL: config.ANTI_CALL || 'off',
   AUTO_STATUS_SEEN: config.AUTO_STATUS_SEEN || "true",
   AUTO_STATUS_REACT: config.AUTO_STATUS_REACT || "true",
   AUTO_STATUS_REPLY: config.AUTO_STATUS_REPLY || "false",
