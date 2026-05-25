@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 cmd({
     pattern: "ssweb",
     alias: ["ss", "webss"],
-    react: "📸",
+    react: "👑",
     desc: "Take website screenshot",
     category: "tools",
     use: ".ssweb https://google.com",
@@ -21,10 +21,10 @@ cmd({
 
         // URL check
         if (!q.startsWith("http://") && !q.startsWith("https://")) {
-            return reply("❌ Invalid URL!");
+            return reply("*LINK GHALAT HAI 🙄*");
         }
 
-        await reply("📸 Taking website screenshot...");
+        await reply("*THORA SA INTAZAR KARE.....*\n*SCREENSHOT SEND HO RAHA HAI 😊*");
 
         // API URL
         const api = `https://api.deline.web.id/tools/screenshot?url=${encodeURIComponent(q)}`;
@@ -33,10 +33,10 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: api },
             caption:
-`📸 *Website Screenshot*
+`*👑 WEBSITE LINK 👑*
+*${q}*
 
-🌐 URL:
-${q}`
+*👑 BY :❯ BILAL-MD 👑*`
         }, { quoted: mek });
 
     } catch (e) {
