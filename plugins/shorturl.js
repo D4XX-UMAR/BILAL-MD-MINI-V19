@@ -14,15 +14,15 @@ cmd({
     try {
 
         if (!q) {
-            return reply("❌ Please provide a URL!");
+            return reply("*APKE PASS KOI BARA SE LINK HAI 😳 AUR AP ISKO CHOTA KARNA CHAHTE HO 😂*\n*AP ESE LIKHO 😊*\n\n*.SHORTURL ❮APKA BARA LINKK❯*\n\n*JAB AP ESE LIKHO GE TO APKA BARA LINK CHOTE SE LINK ME CHANGE HO JAYE GA 😂🤗*");
         }
 
         // Basic URL check
         if (!q.startsWith("http://") && !q.startsWith("https://")) {
-            return reply("❌ Invalid URL!\nExample:\n.short https://google.com");
+            return reply("*LINK SAI DO YEH LINK GHALAT HAI 🥲*");
         }
 
-        await reply("🔗 Shortening URL...");
+        await reply("*APKA LINK CHOTA HO RHA HAI.....😂*");
 
         const api = `https://api.ilhm.my.id/tools/shorturl?url=${encodeURIComponent(q)}&service=auto`;
 
@@ -30,20 +30,22 @@ cmd({
         const data = await response.json();
 
         if (!data.status || !data.result) {
-            return reply("❌ Failed to shorten URL!");
+            return reply("*DUBARA KOSHISH KARE 😊*");
         }
 
         const shortUrl = data.result;
 
         await conn.sendMessage(from, {
             text:
-`🔗 *URL Shortened Successfully!*
+`*👑 SUCCESSED 👑*
 
-🌐 Original:
-${q}
+*APKA ASAL LINK*
+*${q}*
 
-✨ Short URL:
-${shortUrl}`
+*AB CHOTA SA LINK*
+*${shortUrl}*
+
+*👑 BY :❯ BILAL-MD 👑*`
         }, { quoted: mek });
 
     } catch (e) {
