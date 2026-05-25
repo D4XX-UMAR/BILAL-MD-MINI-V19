@@ -2,6 +2,9 @@ const { cmd } = require('../command');
 const FormData = require('form-data');
 const fetch = require('node-fetch');
 
+// Store last images
+global.lastImages = global.lastImages || {};
+
 cmd({
     pattern: "imgtourl",
     alias: ["tourl", "imgurl"],
@@ -14,6 +17,11 @@ cmd({
 async (conn, mek, m, { from, reply }) => {
 
     try {
+
+        // Save latest image automatically
+        if (m.mtype && m.mtype.includes("image")) {
+            global.lastImages[from] = m;
+        }
 
         let mediaMessage = null;
 
@@ -44,17 +52,8 @@ async (conn, mek, m, { from, reply }) => {
         }
 
         // Previous image detect
-        if (!mediaMessage) {
-
-            const messages = await conn.loadMessages(from, 10);
-
-            for (const msg of messages.reverse()) {
-
-                if (msg.message?.imageMessage) {
-                    mediaMessage = msg;
-                    break;
-                }
-            }
+        if (!mediaMessage && global.lastImages[from]) {
+            mediaMessage = global.lastImages[from];
         }
 
         // No image found
@@ -64,20 +63,21 @@ async (conn, mek, m, { from, reply }) => {
 
         await reply("📤 Uploading image...");
 
-        // Download image
         let media;
 
+        // Download image
         if (typeof mediaMessage.download === "function") {
             media = await mediaMessage.download();
         } else {
             media = await conn.downloadMediaMessage(mediaMessage);
         }
 
+        // Download failed
         if (!media) {
             return reply("❌ Image download failed!");
         }
 
-        // FormData
+        // Create form
         const form = new FormData();
 
         form.append("reqtype", "fileupload");
@@ -107,7 +107,7 @@ async (conn, mek, m, { from, reply }) => {
             return reply("❌ Upload failed!");
         }
 
-        // Success
+        // Send success
         await conn.sendMessage(from, {
             text:
 `🖼️ *Image Uploaded Successfully!*
