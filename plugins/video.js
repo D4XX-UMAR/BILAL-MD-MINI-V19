@@ -4,10 +4,10 @@ const yts = require('yt-search');
 
 cmd({
     pattern: "video",
-    alias: ["ytv", "v"],
+    alias: ["ytv", "v", "ytv", "mp4"],
     desc: "Search and Direct Video Downloader",
     category: "download",
-    react: "🎬",
+    react: "👑",
     filename: __filename
 },
 async (conn, mek, m, { from, q, reply }) => {
@@ -32,16 +32,16 @@ async (conn, mek, m, { from, q, reply }) => {
         const resData = response.data;
 
         if (!resData.success || !resData.result) {
-            return reply("❌ Video download nahi ho saki!");
+            return reply("*DUBARA KOSHISH KARE 🤗*");
         }
 
         // Direct Video Message
         await conn.sendMessage(from, {
             video: { url: resData.result.download_url },
-            caption: `*${resData.result.title}*`
+            caption: `*${resData.result.title}*\n\n*👑 BY :❯ BILAL-MD 👑*`
         }, { quoted: mek });
 
-        await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
+        await conn.sendMessage(from, { react: { text: "👑", key: mek.key } });
 
     } catch (e) {
         console.error(e);
