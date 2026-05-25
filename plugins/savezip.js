@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 cmd({
     pattern: "savezip",
     alias: ["webzip", "sitezip", "getzip", "savecode", "getcode"],
-    react: "📦",
+    react: "👑",
     desc: "Download website as ZIP",
     category: "tools",
     use: ".saveweb https://example.com",
@@ -15,19 +15,16 @@ cmd({
 
         if (!q) {
             return reply(
-`❌ Please provide website URL!
-
-Example:
-.saveweb https://google.com`
+`*APKE PASS KOI BHI WEBSITE HAI 😳 AUR APKO USKA BACKEND CODES CHAHYE FILE PURI 😳*\n*TO AP US WEBSITE KA LINK COPY KAR LO LAZMI 🤫*\n*PHIR ESE LIKHO 🤗*\n\n*.SAVEZIP ❮WEBSITE LINK❯*\n\n*JAB AP ESE LIKHO GE TO APKO US WEBSITE KI ALL CODES KI ZIP FILE BHEJ DE JAYE GE 🤫😁 AUR KISI KO PATA BHI NAHI CHALE GA 😂*`
             );
         }
 
         // URL check
         if (!q.startsWith("http://") && !q.startsWith("https://")) {
-            return reply("❌ Invalid URL!");
+            return reply("*LINK GHALAT HAI*");
         }
 
-        await reply("📦 Copying website files...");
+        await reply("*PLEASE WAIT...*\n*COPYING WEBSITE CODES...*\n*MAKING ZIP FILE....*\n*NOW SENDING....*");
 
         // API URL
         const api = `https://api.lexcode.biz.id/api/tools/saveweb2zip?url=${encodeURIComponent(q)}`;
@@ -36,7 +33,7 @@ Example:
         const data = await response.json();
 
         if (!data.success || !data.result?.download) {
-            return reply("❌ Failed to create website ZIP!");
+            return reply("*ZIP FILE NAHI BAN RAHI SORRY 😓*");
         }
 
         const result = data.result;
@@ -47,16 +44,15 @@ Example:
             mimetype: 'application/zip',
             fileName: 'website.zip',
             caption:
-`📦 *Website ZIP Created Successfully!*
+`*👑 ZIP CREATED SUCCESSED 👑*
 
-🌐 Target:
-${result.target}
+*👑 WEBSITE LINK 👑*
+*${result.target}*
 
-📁 Files Copied:
+*👑 COPIED FILES 👑*
 ${result.copiedFiles}
 
-✅ Finished:
-${result.finished}`
+*👑 BY :❯ BILAL-MD 👑*`
         }, { quoted: mek });
 
     } catch (e) {
