@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 cmd({
     pattern: "bing",
     alias: ["img", "image"],
-    react: "🖼️",
+    react: "👑",
     desc: "Search Bing Images",
     category: "search",
     use: ".bing cat",
@@ -14,10 +14,10 @@ cmd({
     try {
 
         if (!q) {
-            return reply("❌ Please provide image name!");
+            return reply("*APKO KOI PHOTOS CHAHYE 🤗*\n*TO AP ESE LIKHO 😊*\n\n*.BING ❮PHOTO NAME❯*\n\n*JAB AP ESE LIKHO GE TO APKE PHOTOS YAHA BHEJ DIE JAYE GE 🤗*");
         }
 
-        await reply("🔍 Searching images...");
+        await reply("*APKE PHOTOS DOWNLOAD HO RAHE HAI....*");
 
         const api = `https://api.ilhm.my.id/search/bingimage?q=${encodeURIComponent(q)}&limit=5`;
 
@@ -25,7 +25,7 @@ cmd({
         const data = await response.json();
 
         if (!data.status || !data.result.length) {
-            return reply("❌ No images found!");
+            return reply("*APKE PHOTOS NAHI MILE SORRY 😓*");
         }
 
         for (let img of data.result) {
@@ -34,7 +34,7 @@ cmd({
 
             await conn.sendMessage(from, {
                 image: { url: imageUrl },
-                caption: `🖼️ *Bing Image Result*\n\n🔎 Query: ${q}`
+                caption: `*👑 PHOTOS NAME 👑*\n ${q}\n\n*👑 BY :❯ BILAL-MD 👑*`
             }, { quoted: mek });
 
         }
