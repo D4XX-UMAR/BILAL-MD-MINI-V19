@@ -4,7 +4,7 @@ const axios = require('axios');
 cmd({
     pattern: "hd",
     alias: ["enhance", "remini"],
-    react: "✨",
+    react: "👑",
     desc: "Enhance image quality",
     category: "tools",
     use: ".hd reply image OR .hd image_url",
