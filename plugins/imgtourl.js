@@ -3,20 +3,21 @@ const FormData = require('form-data');
 const fetch = require('node-fetch');
 
 cmd({
-    pattern: "imgurl",
-    alias: ["tolink", "imgtourl", "imgurl", "img2url", "tourl"],
+    pattern: "imgtourl",
+    alias: ["tourl", "imgurl"],
     react: "🖼️",
     desc: "Convert image to URL",
     category: "tools",
-    use: ".imgurl",
+    use: ".imgtourl",
     filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
+},
+async (conn, mek, m, { from, reply }) => {
 
     try {
 
-        let mediaMessage;
+        let mediaMessage = null;
 
-        // REPLY IMAGE
+        // Reply image detect
         if (m.quoted) {
 
             const mime =
@@ -29,7 +30,7 @@ cmd({
             }
         }
 
-        // DIRECT IMAGE WITH COMMAND
+        // Direct image detect
         if (!mediaMessage) {
 
             const mime =
@@ -42,22 +43,41 @@ cmd({
             }
         }
 
-        // NO IMAGE
+        // Previous image detect
+        if (!mediaMessage) {
+
+            const messages = await conn.loadMessages(from, 10);
+
+            for (const msg of messages.reverse()) {
+
+                if (msg.message?.imageMessage) {
+                    mediaMessage = msg;
+                    break;
+                }
+            }
+        }
+
+        // No image found
         if (!mediaMessage) {
             return reply("❌ Send or reply to an image!");
         }
 
-        // START MESSAGE
         await reply("📤 Uploading image...");
 
-        // DOWNLOAD IMAGE
-        const media = await mediaMessage.download();
+        // Download image
+        let media;
+
+        if (typeof mediaMessage.download === "function") {
+            media = await mediaMessage.download();
+        } else {
+            media = await conn.downloadMediaMessage(mediaMessage);
+        }
 
         if (!media) {
             return reply("❌ Image download failed!");
         }
 
-        // FORM DATA
+        // FormData
         const form = new FormData();
 
         form.append("reqtype", "fileupload");
@@ -67,23 +87,27 @@ cmd({
             contentType: "image/jpeg"
         });
 
-        // UPLOAD TO CATBOX
-        const response = await fetch(
+        // Upload to Catbox
+        const res = await fetch(
             "https://catbox.moe/user/api.php",
             {
                 method: "POST",
-                body: form
+                body: form,
+                headers: form.getHeaders()
             }
         );
 
-        const data = await response.text();
+        const data = await res.text();
 
-        // CHECK RESPONSE
-        if (!data || !data.startsWith("https")) {
+        // Upload failed
+        if (!data.startsWith("https://")) {
+
+            console.log(data);
+
             return reply("❌ Upload failed!");
         }
 
-        // SEND URL
+        // Success
         await conn.sendMessage(from, {
             text:
 `🖼️ *Image Uploaded Successfully!*
@@ -98,5 +122,4 @@ ${data}`
 
         reply(`❌ Error: ${e.message}`);
     }
-
 });
