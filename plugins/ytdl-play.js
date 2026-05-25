@@ -1,59 +1,79 @@
 const { cmd } = require('../command');
 const fetch = require('node-fetch');
-const yts = require('yt-search'); // search support
+const yts = require('yt-search');
 
 cmd({
     pattern: "play",
     alias: ["ytplay", "music"],
     react: "🎶",
-    desc: "Download YouTube audio using GTech API",
+    desc: "Download YouTube audio",
     category: "download",
-    use: ".play2 <song name or YouTube URL>",
+    use: ".play <song name>",
     filename: __filename
 }, async (conn, m, mek, { from, q, reply }) => {
     try {
-        if (!q) return await reply("❌ Please provide a song name or YouTube URL!");
 
-        await reply("⏳ Searching and fetching audio...");
+        if (!q) {
+            return reply("❌ Please provide song name or YouTube URL!");
+        }
+
+        await reply("🔍 Searching song...");
 
         let videoUrl = q;
+        let searchData;
 
-        // If not a YouTube URL, search first
-        if (!q.match(/(youtube\.com|youtu\.be)/)) {
-            const search = await yts(q);
-            if (!search.videos.length) return await reply("❌ No results found!");
-            videoUrl = search.videos[0].url;
+        // If not URL → search with yts
+        if (!q.includes("youtube.com") && !q.includes("youtu.be")) {
+
+            searchData = await yts(q);
+
+            if (!searchData.videos.length) {
+                return reply("❌ Song not found!");
+            }
+
+            videoUrl = searchData.videos[0].url;
         }
 
-        // API call (replace APIKEY with your valid key)
-        const apiUrl = `https://api.ilhm.my.id/download/youtube?url=${encodeURIComponent(videoUrl)}`;
-        const response = await fetch(apiUrl);
+        // API request
+        const api = `https://api.ilhm.my.id/download/youtube?url=${encodeURIComponent(videoUrl)}&type=audio&resolusi=144`;
+
+        const response = await fetch(api);
         const data = await response.json();
 
-        if (!data.status || !data.result || !data.result.media) {
-            return await reply("❌ Failed to fetch audio!");
+        if (!data.status || !data.result) {
+            return reply("❌ Failed to fetch audio!");
         }
 
-        const { title, thumbnail, audio_url, channel, description } = data.result.media;
+        const result = data.result;
 
-        // Send details with cover
+        const title = result.title || "Unknown";
+        const thumbnail = result.thumbnail;
+        const audioUrl = result.download;
+        const duration = result.duration || "Unknown";
+
+        // Send thumbnail + details
         await conn.sendMessage(from, {
             image: { url: thumbnail },
-            caption: `🎶 *${title}*\n📺 ${channel}\n\n${description.substring(0, 200)}...`
+            caption:
+`🎶 *${title}*
+
+⏱ Duration: ${duration}s
+📥 Quality: ${result.quality}
+
+⬇️ Downloading audio...`
         }, { quoted: mek });
 
-        // Send audio file
+        // Send audio
         await conn.sendMessage(from, {
-            audio: { url: audio_url },
+            audio: { url: audioUrl },
             mimetype: 'audio/mpeg',
             ptt: false
         }, { quoted: mek });
 
-        await reply(`✅ *${title}* downloaded successfully!`);
+        return reply("✅ Audio sent successfully!");
 
-    } catch (error) {
-        console.error(error);
-        await reply(`❌ Error: ${error.message}`);
+    } catch (e) {
+        console.log(e);
+        return reply(`❌ Error: ${e.message}`);
     }
 });
-  
