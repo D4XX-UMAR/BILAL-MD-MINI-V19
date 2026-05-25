@@ -26,7 +26,7 @@ cmd({
         }
 
         // API call (replace APIKEY with your valid key)
-        const apiUrl = `https://gtech-api-xtp1.onrender.com/api/audio/yt?apikey=APIKEY&url=${encodeURIComponent(videoUrl)}`;
+        const apiUrl = `https://api.ilhm.my.id/download/youtube?url=${encodeURIComponent(videoUrl)}`;
         const response = await fetch(apiUrl);
         const data = await response.json();
 
