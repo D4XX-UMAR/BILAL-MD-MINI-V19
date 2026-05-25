@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+hereconst { cmd } = require('../command');
 const fetch = require('node-fetch');
 const yts = require('yt-search');
 
@@ -18,48 +18,53 @@ cmd({
             return reply("❌ Please provide song name!");
         }
 
-        // HIDDEN YOUTUBE SEARCH
+        // YOUTUBE SEARCH (HIDDEN)
         const search = await yts(q);
 
-        // FIRST VIDEO TITLE
-        const title = search.videos[0]?.title;
-
-        if (!title) {
+        if (!search.videos || search.videos.length === 0) {
             return reply("❌ Lyrics not found!");
         }
 
+        // FIRST VIDEO
+        const video = search.videos[0];
+        const title = video.title;
+        const thumbnail = video.thumbnail;
+        const duration = video.timestamp;
+
         // LYRICS API
-        const api = `https://api.lexcode.biz.id/api/tools/lyrics?query=${encodeURIComponent(title)}`;
+        const api = `https://api.lexcode.biz.id/api/tools/lyrics?title=${encodeURIComponent(title)}`;
 
         const response = await fetch(api);
         const data = await response.json();
 
-        if (!data.success || !data.results.length) {
+        if (!data.success || !data.results || data.results.length === 0) {
             return reply("❌ Lyrics not found!");
         }
 
+        // FIRST RESULT
         const song = data.results[0];
-
-        const thumbnail = search.videos[0].thumbnail;
-        const duration = search.videos[0].timestamp;
 
         const lyrics = song.songs?.lyrics || "Lyrics not found!";
 
-        // LIMIT LYRICS
+        // LIMIT LONG LYRICS
         const shortLyrics = lyrics.length > 4000
             ? lyrics.substring(0, 4000) + "..."
             : lyrics;
 
-        // FINAL RESULT ONLY
+        // FINAL MESSAGE
+        const msg = `🎵 *${song.name}*
+
+👤 *Artist:* ${song.artist}
+💿 *Album:* ${song.album}
+⏱️ *Duration:* ${duration}
+
+📝 *Lyrics:*
+
+${shortLyrics}`;
+
         await conn.sendMessage(from, {
             image: { url: thumbnail },
-            caption:
-`🎵 *${title}*
-
-⏱ Duration: ${duration}
-
-📝 Lyrics:
-${shortLyrics}`
+            caption: msg
         }, { quoted: mek });
 
     } catch (e) {
