@@ -4,48 +4,86 @@ const fetch = require('node-fetch');
 
 cmd({
     pattern: "imgurl",
-    alias: ["tourl", "imgtourl"],
+    alias: ["tolink", "imgtourl", "imgurl", "img2url", "tourl"],
     react: "🖼️",
     desc: "Convert image to URL",
     category: "tools",
-    use: ".imgurl reply image",
+    use: ".imgurl",
     filename: __filename
-}, async (conn, m, mek, { from, quoted, reply }) => {
+}, async (conn, mek, m, { from, reply }) => {
 
     try {
 
-        const msg = quoted ? quoted : m;
+        let mediaMessage;
 
-        const mime = (msg.msg || msg).mimetype || '';
+        // REPLY IMAGE
+        if (m.quoted) {
 
-        if (!mime.startsWith('image')) {
-            return reply("❌ Reply to an image!");
+            const mime =
+                m.quoted.mtype ||
+                m.quoted.mediaType ||
+                "";
+
+            if (mime.includes("image")) {
+                mediaMessage = m.quoted;
+            }
         }
 
+        // DIRECT IMAGE WITH COMMAND
+        if (!mediaMessage) {
+
+            const mime =
+                m.mtype ||
+                m.mediaType ||
+                "";
+
+            if (mime.includes("image")) {
+                mediaMessage = m;
+            }
+        }
+
+        // NO IMAGE
+        if (!mediaMessage) {
+            return reply("❌ Send or reply to an image!");
+        }
+
+        // START MESSAGE
         await reply("📤 Uploading image...");
 
-        // Download image
-        const media = await conn.downloadMediaMessage(msg);
+        // DOWNLOAD IMAGE
+        const media = await mediaMessage.download();
 
-        // FormData
+        if (!media) {
+            return reply("❌ Image download failed!");
+        }
+
+        // FORM DATA
         const form = new FormData();
 
-        form.append('reqtype', 'fileupload');
-        form.append('fileToUpload', media, 'image.jpg');
+        form.append("reqtype", "fileupload");
 
-        // Upload to Catbox
-        const response = await fetch('https://catbox.moe/user/api.php', {
-            method: 'POST',
-            body: form
+        form.append("fileToUpload", media, {
+            filename: "image.jpg",
+            contentType: "image/jpeg"
         });
+
+        // UPLOAD TO CATBOX
+        const response = await fetch(
+            "https://catbox.moe/user/api.php",
+            {
+                method: "POST",
+                body: form
+            }
+        );
 
         const data = await response.text();
 
-        if (!data.startsWith('https')) {
+        // CHECK RESPONSE
+        if (!data || !data.startsWith("https")) {
             return reply("❌ Upload failed!");
         }
 
-        // Send URL
+        // SEND URL
         await conn.sendMessage(from, {
             text:
 `🖼️ *Image Uploaded Successfully!*
@@ -55,7 +93,9 @@ ${data}`
         }, { quoted: mek });
 
     } catch (e) {
+
         console.log(e);
+
         reply(`❌ Error: ${e.message}`);
     }
 
