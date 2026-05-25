@@ -12,6 +12,34 @@ const { writeFileSync } = require('fs');
 const path = require('path');
 
 cmd({
+    pattern: "anticall",
+    alias: ["anti-call"],
+    desc: "Enable or disable anticall feature.",
+    category: "settings",
+    filename: __filename
+},
+async (conn, mek, m, { from, args, isCreator, reply }) => {
+
+    if (!isCreator) {
+        return reply("*📛 Only owner can use this command!*");
+    }
+
+    const status = args[0]?.toLowerCase();
+
+    if (status === "on") {
+        config.ANTI_CALL = "on";
+        return reply("✅ AntiCall enabled.");
+    }
+
+    if (status === "off") {
+        config.ANTI_CALL = "off";
+        return reply("❌ AntiCall disabled.");
+    }
+
+    reply("Example: .anticall on/off");
+});
+
+cmd({
     pattern: "admin-events",
     alias: ["adminevents"],
     desc: "Enable or disable admin event notifications",
