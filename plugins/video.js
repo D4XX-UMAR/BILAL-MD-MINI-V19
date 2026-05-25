@@ -12,7 +12,7 @@ cmd({
 },
 async (conn, mek, m, { from, q, reply }) => {
     try {
-        if (!q) return reply("Video ka naam ya link do!");
+        if (!q) return reply("*AP NE KOI YOUTUBE SE VIDEO DOWNLOAD KARNI HAI 🤔*\n*TO AP ESE LIKHO 😊*\n\n*.VIDEO ❮VIDEO NAME❯*\n*JESE.....*\n.VIDEO AJA VE MAHIYA SONG*\n\n*JAB AP ESE LIKHO GE TO APKI VIDEO YOUTUBE SE DOWNLOAD KAR KE YAHA BHEJ DE JAYE GE 🤗*");
 
         await conn.sendMessage(from, { react: { text: "🔍", key: mek.key } });
 
@@ -22,7 +22,7 @@ async (conn, mek, m, { from, q, reply }) => {
         if (!q.includes("youtube.com") && !q.includes("youtu.be")) {
             const search = await yts(q);
             const data = search.videos[0];
-            if (!data) return reply("❌ Bilal yar, kuch nahi mila!");
+            if (!data) return reply("*APKI YOUTUBE VIDEO NAHI MILI 😓*");
             videoUrl = data.url;
         }
 
