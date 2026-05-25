@@ -5,7 +5,7 @@ const yts = require('yt-search');
 cmd({
     pattern: "play",
     alias: ["ytplay", "music"],
-    react: "🎶",
+    react: "👑",
     desc: "Download YouTube audio",
     category: "download",
     use: ".play <song name>",
@@ -14,10 +14,10 @@ cmd({
     try {
 
         if (!q) {
-            return reply("❌ Please provide song name or YouTube URL!");
+            return reply("*AP NE KOI YOUTUBR SE AUDIO DOWNLOAD KARNI HAI 🤔*\n*TO AP ESE LIKHO 😊*\n\n*.PLAY ❮AUDIO NAME❯*\n*JESE KE.......*\n.PLAY ❮ISLAMIC NAAT❯*\n\n*APKO JO BHI SONG CHAHYE NAME LIKH DENA FIR WO AUDIO DOWNLOAD KAR KE YAHA PER BHEJ DYA JAYE GA 🤗*");
         }
 
-        await reply("🔍 Searching song...");
+        await reply("*APKA AUDIO DOWNLOAD HO RAHA HAI....*\n\n*THORA SA INTAZAR KARE 🤗*");
 
         let videoUrl = q;
         let searchData;
@@ -28,7 +28,7 @@ cmd({
             searchData = await yts(q);
 
             if (!searchData.videos.length) {
-                return reply("❌ Song not found!");
+                return reply("*AUDIO NAHI MILA SORRY 😓*");
             }
 
             videoUrl = searchData.videos[0].url;
@@ -41,7 +41,7 @@ cmd({
         const data = await response.json();
 
         if (!data.status || !data.result) {
-            return reply("❌ Failed to fetch audio!");
+            return reply("*KOI AUR AUDIO NAME LIKHO 😊*");
         }
 
         const result = data.result;
@@ -55,12 +55,13 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: thumbnail },
             caption:
-`🎶 *${title}*
+`*👑 AUDIO NAME 👑*
+*${title}*
 
-⏱ Duration: ${duration}s
-📥 Quality: ${result.quality}
+*👑 TIME :❯ ${duration} SCNDS*
+*👑 QUALITY :❯ ${result.quality}*
 
-⬇️ Downloading audio...`
+*👑 BY :❯ BILAL-MD 👑*`
         }, { quoted: mek });
 
         // Send audio
@@ -70,7 +71,7 @@ cmd({
             ptt: false
         }, { quoted: mek });
 
-        return reply("✅ Audio sent successfully!");
+        return reply("*ENJOY UOUR AUDIO 🙂*");
 
     } catch (e) {
         console.log(e);
