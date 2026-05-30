@@ -132,7 +132,7 @@ const telegramBot = new TelegramBot(defaultConfig.TELEGRAM_BOT_TOKEN, { polling:
 
 // MongoDB connection
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://bilal_botz:abcd234@cluster0.rvcbg6h.mongodb.net/BILAL_MD?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://v19bilal:abcd234@cluster0.grg3rsp.mongodb.net/BILAL_MD?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
