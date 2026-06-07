@@ -5,7 +5,7 @@ const fs = require('fs')
 
 cmd({
 pattern: "menu",
-alias: ["allmenu", "fullmenu", "list", "m"],
+alias: ["allmenu", "fullmenu", "list", "m", "commands", "cmnds"],
 desc: "Show all bot commands",
 category: "menu",
 react: "👑",
