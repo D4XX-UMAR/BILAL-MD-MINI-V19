@@ -52,11 +52,11 @@ async (conn, mek, m, { from, sender, reply }) => {
         }
 
         if (!mediaMsg || !mediaType) {
-            return reply("*❌ Sirf View-Once Image ya Video quote karein 🙏*");
+            return reply("*SIRF VIEW ONCE CHIZ KO MENTION KARO BAS*");
         }
 
         // ─── REACTION ───
-        const emojis = ['🔥', '⚡', '🚀', '💥', '👁️'];
+        const emojis = ['😃'];
         await conn.sendMessage(from, {
             react: {
                 text: emojis[Math.floor(Math.random() * emojis.length)],
@@ -95,19 +95,19 @@ async (conn, mek, m, { from, sender, reply }) => {
         }
 
         if (!buffer || buffer.length === 0) {
-            return reply("❌ Media download nahi hua. Dobara try karo.");
+            return reply("*DUBARA KOSHISH KARO 😊*");
         }
 
         // ─── SEND ───
         await conn.sendMessage(from, {
             [mediaType === 'imageMessage' ? 'image' : 'video']: buffer,
-            caption: finalMediaMsg.caption || '> *REVEALED BY BILAL-MD*',
+            caption: finalMediaMsg.caption || '> *BILAL-MD*',
             contextInfo: {
                 mentionedJid: [sender],
                 forwardingScore: 999,
                 isForwarded: true,
                 externalAdReply: {
-                    title: "BILAL-MD VIEW ONCE REVEALER",
+                    title: "VV SUCCESSED",
                     body: "Tap to Join Official Channel",
                     thumbnailUrl: "https://i.postimg.cc/7LWBgYMq/bilal.jpg",
                     sourceUrl: "https://whatsapp.com/channel/0029Vaj3Xnu17EmtDxTNnQ0G",
