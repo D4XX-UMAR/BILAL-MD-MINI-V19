@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BILAL-MD</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+#videoBg { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+#videoBg.active { display: block; }
+#videoBg video { width: 100%; height: 100%; object-fit: cover; opacity: 0.45; }
+
+body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #000; font-family: 'Rajdhani', sans-serif; color: #fff; overflow-x: hidden; overflow-y: auto; position: relative; padding: 30px 15px; }
+
+@keyframes rgbText { 0%{color:#ff0000}14%{color:#ff7700}28%{color:#ffff00}42%{color:#00cc00}57%{color:#00bbff}71%{color:#0000ff}85%{color:#cc00ff}100%{color:#ff0000} }
+@keyframes rgbBorder { 0%{border-color:#ff0000}14%{border-color:#ff7700}28%{border-color:#ffff00}42%{border-color:#00ff00}57%{border-color:#00ffff}71%{border-color:#0000ff}85%{border-color:#ff00ff}100%{border-color:#ff0000} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.5} }
+@keyframes spin { from{transform:rotate(0deg)}to{transform:rotate(360deg)} }
+
+.wrapper { width: 100%; max-width: 860px; display: flex; flex-direction: column; align-items: center; gap: 24px; position: relative; z-index: 10; }
+
+.header { text-align: center; }
+.logo-text { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; animation: rgbText 7s linear infinite; margin-bottom: 6px; }
+.logo-sub { font-family: 'Orbitron', sans-serif; font-size: 20px; letter-spacing: 4px; animation: rgbText 7s linear infinite; animation-delay: -1.5s; }
+
+.warn-strip { width: 100%; background: transparent; border: 4px solid #ff0000; padding: 14px 18px; font-size: 18px; color: #ffcc99; text-align: center; line-height: 1.6; animation: rgbBorder 4s linear infinite; }
+.warn-strip b { color: #ff7744; }
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } .logo-text { font-size: 26px; } }
+
+.box { width: 100%; padding: 32px 26px; background: transparent; border: 4px solid #ff0000; animation: rgbBorder 4s linear infinite; text-align: center; }
+.box.delete-box { animation-delay: -2s; }
+
+.box-icon { font-size: 40px; margin-bottom: 10px; animation: rgbText 7s linear infinite; }
+.box h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; margin-bottom: 4px; animation: rgbText 7s linear infinite; animation-delay: -1s; }
+.box h6 { font-size: 16px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 22px; animation: rgbText 7s linear infinite; animation-delay: -2s; }
+
+.input-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+input { width: 100%; padding: 13px 15px; background: transparent; border: 3px solid #ccc; color: #fff; font-size: 18px; text-align: center; outline: none; transition: 0.3s; font-family: 'Rajdhani', sans-serif; }
+input:focus { animation: rgbBorder 4s linear infinite; }
+.input-container button { padding: 13px 18px; border: 4px solid #ddd; cursor: pointer; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 16px; background: transparent; transition: 0.3s; letter-spacing: 2px; animation: rgbText 7s linear infinite, rgbBorder 4s linear infinite; }
+.input-container button:hover { transform: scale(1.03); background: #f5f5f5; color: #000; }
+.input-container button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.status-area { margin-top: 14px; min-height: 20px; }
+.status-msg { font-size: 17px; padding: 10px 14px; margin-bottom: 10px; line-height: 1.6; display: none; }
+.status-msg.show { display: block; animation: fadeIn 0.3s ease; }
+.status-msg.loading { background: transparent; border: 3px solid #4499ff; color: #99ccff; animation: pulse 1.5s infinite; }
+.status-msg.success { background: transparent; border: 3px solid #00cc00; color: #88ff88; }
+.status-msg.error   { background: transparent; border: 3px solid #cc0000; color: #ff8888; }
+.status-msg.warn    { background: transparent; border: 3px solid #cc6600; color: #ffcc77; }
+
+.code-display { margin-top: 14px; padding: 18px; background: transparent; border: 4px solid #ff0000; font-family: 'Orbitron', sans-serif; font-size: 32px; display: none; align-items: center; justify-content: center; gap: 14px; cursor: pointer; animation: rgbBorder 4s linear infinite; }
+.code-display.show { display: flex; }
+#copy-value { animation: rgbText 7s linear infinite; font-weight: 900; letter-spacing: 4px; }
+.code-hint { margin-top: 10px; font-size: 16px; color: #bbb; letter-spacing: 1px; line-height: 1.6; display: none; }
+.code-hint.show { display: block; }
+
+.restart-btn { display: none; margin-top: 14px; width: 100%; padding: 12px; border: 4px solid #ddd; cursor: pointer; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 15px; background: transparent; letter-spacing: 2px; transition: 0.3s; animation: rgbText 7s linear infinite, rgbBorder 4s linear infinite; }
+.restart-btn.show { display: block; }
+.restart-btn:hover { transform: scale(1.03); background: #f5f5f5; color: #000; }
+
+.debug-log { width: 100%; background: transparent; border: 3px solid #444; padding: 14px 16px; font-family: monospace; font-size: 15px; color: #aaa; max-height: 160px; overflow-y: auto; text-align: left; line-height: 1.7; }
+.debug-log .d-line { display: block; }
+.debug-log .d-ok   { color: #00ff66; }
+.debug-log .d-err  { color: #ff4422; }
+.debug-log .d-info { color: #55aaff; }
+.debug-log .d-warn { color: #ffbb33; }
+.spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid #ffffff33; border-top-color: #4499ff; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 6px; }
+</style>
+</head>
+<body>
+
+<div id="videoBg">
+  <video id="bgVideo" autoplay loop playsinline muted></video>
+</div>
+
+<div class="wrapper">
+
+  <div class="header">
+    <div class="logo-text">BILAL-MD</div>
+    <div class="logo-sub">FREE BOT PAIR SYSTEM</div>
+  </div>
+
+  <div class="warn-strip">
+    ⚠️ <b>IMPORTANT:</b> AGAR APKA NUMBER PER PEHLE BOT THA LEKIN AP NE DELETE KAR DIYA LEKIN BILAL-MD ME DATA SAVE MILA TO NICHE BOX HAI ❮ DELETE OLD DATA ❯ WAHA SE OLD DATA CLEAR KARO PHIR <b>NEW PAIR CODE</b> LE LO
+  </div>
+
+  <div class="cards">
+
+    <!-- ═══ LEFT: NEW PAIR ═══ -->
+    <div class="box" id="pairBox">
+      <div class="box-icon">🔗</div>
+      <h3>NEW PAIR CODE</h3>
+      <h6>APNA WHATSAPP NUMBER DALO</h6>
+
+      <div class="input-container">
+        <input placeholder="EXAMPLE ❯ 923001234567" type="tel" id="pairNumber" maxlength="15">
+        <button id="pairBtn" onclick="getPairCode()">GET PAIR CODE</button>
+      </div>
+
+      <div class="status-area">
+        <div class="status-msg" id="pairStatus"></div>
+        <div class="code-display" id="codeDisplay" onclick="copyCode()">
+          <i class="fas fa-copy"></i>
+          <span id="copy-value">----</span>
+        </div>
+        <div class="code-hint" id="codeHint">
+          📱 WhatsApp → Linked Devices → Link a Device → Link with Phone Number → Code dalo
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RIGHT: DELETE SESSION ═══ -->
+    <div class="box delete-box" id="deleteBox">
+      <div class="box-icon">🗑️</div>
+      <h3>DELETE OLD SESSION</h3>
+      <h6>CLEAR ALL DATA — THEN NEW PAIR</h6>
+
+      <div class="input-container">
+        <input placeholder="EXAMPLE ❯ 923001234567" type="tel" id="delNumber" maxlength="15">
+        <button id="delBtn" onclick="deleteSession()">DELETE OLD DATA</button>
+      </div>
+
+      <div class="status-area">
+        <div class="status-msg" id="delStatus"></div>
+        <button class="restart-btn" id="restartBtn" onclick="restartPage()">
+          🔄 REFRESH PAGE — AB NEW PAIR KARO
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="debug-log" id="debugLog">
+    <span class="d-line d-info">[BILAL-MD] IS READY WAITING FOR LOGS......</span>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+<script>
+
+const PAIR_VIDEO_URL   = 'https://files.catbox.moe/jwg96k.mp4';
+const DELETE_VIDEO_URL = 'https://files.catbox.moe/4s7y35.mp4';
+
+function playBgVideo(url) {
+  const vid = document.getElementById('bgVideo');
+  if (vid.src !== url) vid.src = url;
+  vid.volume = 1; vid.muted = false; vid.loop = true; vid.play();
+  document.getElementById('videoBg').classList.add('active');
+}
+
+function log(msg, type = 'info') {
+  const box = document.getElementById('debugLog');
+  const line = document.createElement('span');
+  line.className = `d-line d-${type}`;
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function showStatus(id, msg, type) {
+  const el = document.getElementById(id);
+  el.className = `status-msg ${type} show`;
+  el.innerHTML = msg;
+}
+
+// ═══════════════════════════════════════════════════
+// 🔗 GET PAIR CODE — 3 conditions handle karta hai
+// ═══════════════════════════════════════════════════
+async function getPairCode() {
+  playBgVideo(PAIR_VIDEO_URL);
+
+  const raw = document.getElementById('pairNumber').value.trim();
+  const number = raw.replace(/[^0-9]/g, '');
+
+  if (!number || number.length < 10) {
+    showStatus('pairStatus', '❌ Valid number dalo — example: 923001234567', 'error');
+    log('Invalid number entered', 'err');
+    return;
+  }
+
+  // ─── Pehle old data check karo ───
+  try {
+    showStatus('pairStatus', '<span class="spinner"></span> Check kar raha hoon...', 'loading');
+    log(`Checking session for: ${number}`, 'info');
+
+    const checkRes = await axios(`/code/check-session?number=${number}`);
+    const checkData = checkRes.data;
+    log(`Session — MongoDB: ${checkData.hasMongoSession} | Connected: ${checkData.isConnected}`, 'info');
+
+    // Session check — valid hai ya corrupt?
+    if (checkData.hasMongoSession && !checkData.isConnected) {
+      if (checkData.sessionValid) {
+        // Valid session — auto reconnect hoga, koi warning nahi
+        showStatus('pairStatus',
+          `⚡ <b>PURANA SESSION MILA!</b><br><br>` +
+          `NUMBER ❯ <b>${number}</b><br><br>` +
+          `Bot automatically reconnect ho raha hai...<br>` +
+          `<b>⏳ 30 second wait karo — phir WhatsApp check karo</b>`,
+          'success'
+        );
+        log(`Valid session found — auto reconnect hoga`, 'ok');
+        // Proceed karo /code pe — wahan CONDITION 2 handle karega
+      } else {
+        // Corrupt/unlinked session — delete karne kaho
+        showStatus('pairStatus',
+          `⚠️ <b>OLD DATA FOUND</b><br><br>` +
+          `IS NUMBER <b>${number}</b> PER PEHLE BOT THA LEKIN UNLINK HO GAYA.<br><br>` +
+          `<b>PEHLE NICHE WALE BOX ME JAO</b> — APNA NUMBER LIKHO — <b>DELETE OLD DATA</b> DABAO<br><br>` +
+          `PHIR WAPAS AO AUR NEW PAIR CODE LE LO`,
+          'warn'
+        );
+        log(`Corrupt/unlinked session — delete required`, 'warn');
+        const db = document.getElementById('deleteBox');
+        db.style.border = '4px solid #ff6600';
+        db.style.boxShadow = '0 0 25px #ff6600';
+        document.getElementById('delNumber').value = number;
+        setTimeout(() => { db.style.border = ''; db.style.boxShadow = ''; }, 5000);
+        return;
+      }
+    }
+  } catch(e) {
+    log(`Check failed: ${e.message} — proceeding`, 'warn');
+  }
+
+  // ─── /code call karo — server 3 conditions handle karega ───
+  showStatus('pairStatus', '<span class="spinner"></span> Processing...', 'loading');
+  document.getElementById('pairBtn').disabled = true;
+  document.getElementById('codeDisplay').className = 'code-display';
+  document.getElementById('codeHint').className = 'code-hint';
+  log(`Sending request to server for ${number}...`, 'info');
+
+  try {
+    const { data } = await axios(`/code?number=${number}`);
+    document.getElementById('pairBtn').disabled = false;
+    log(`Server response: ${JSON.stringify(data)}`, 'info');
+
+    // ─── CONDITION 1: Already connected — message bhej diya WhatsApp pe ───
+    if (data.status === 'already_connected') {
+      showStatus('pairStatus',
+        `✅ <b>BOT PEHLE SE ACTIVE HAI!</b><br><br>` +
+        `<b>📱 APKE WHATSAPP PE EK MESSAGE BHEJ DIYA GAYA HAI</b><br><br>` +
+        `NUMBER ❯ <b>${number}</b><br>` +
+        `STATUS ❯ <b>✅ CONNECTED & RUNNING</b><br><br>` +
+        `Apna WhatsApp kholo — bot ka message dekhein 😊`,
+        'success'
+      );
+      log(`Already connected — message sent to WhatsApp`, 'ok');
+    }
+
+    // ─── CONDITION 2: Purana session mila — silently reconnect ho raha hai ───
+    else if (data.status === 'reconnecting') {
+      showStatus('pairStatus',
+        `⚡ <b>PURANA SESSION MILA — RECONNECT HO RAHA HAI</b><br><br>` +
+        `NUMBER ❯ <b>${number}</b><br><br>` +
+        `Pair code nahi aayega — bot seedha apne<br>` +
+        `<b>linked WhatsApp device pe active ho jayega</b><br><br>` +
+        `⏳ 30 second wait karo — phir WhatsApp check karo`,
+        'success'
+      );
+      log(`Reconnecting from saved session — no pair code needed`, 'ok');
+    }
+
+    // ─── CONDITION 3: Naya user — fresh pair code ───
+    else if (data.code) {
+      document.getElementById('copy-value').textContent = data.code;
+      document.getElementById('codeDisplay').className = 'code-display show';
+      document.getElementById('codeHint').className = 'code-hint show';
+      showStatus('pairStatus',
+        `✅ <b>PAIR CODE READY!</b><br>Niche code click karo copy ho jayega`,
+        'success'
+      );
+      log(`NEW PAIR CODE :❯ ${data.code}`, 'ok');
+    }
+
+    // ─── Error ───
+    else {
+      showStatus('pairStatus', `❌ Error: ${data.error || data.message || JSON.stringify(data)}`, 'error');
+      log(`Error: ${JSON.stringify(data)}`, 'err');
+    }
+
+  } catch(err) {
+    document.getElementById('pairBtn').disabled = false;
+    showStatus('pairStatus', `❌ Server Error: ${err.message}`, 'error');
+    log(`Server error: ${err.message}`, 'err');
+  }
+}
+
+// ─── DELETE SESSION ───
+async function deleteSession() {
+  playBgVideo(DELETE_VIDEO_URL);
+  const raw = document.getElementById('delNumber').value.trim();
+  const number = raw.replace(/[^0-9]/g, '');
+
+  if (!number || number.length < 10) {
+    showStatus('delStatus', 'NUMBER SAHI LIKHO — EXAMPLE :❯ 923001234567', 'error');
+    return;
+  }
+
+  log(`Delete request for: ${number}`, 'info');
+  showStatus('delStatus', '<span class="spinner"></span> OLD DATA DELETE HO RAHA HAI...', 'loading');
+  document.getElementById('delBtn').disabled = true;
+  document.getElementById('restartBtn').className = 'restart-btn';
+
+  try {
+    const { data } = await axios(`/code/delete-session?number=${number}`);
+    document.getElementById('delBtn').disabled = false;
+
+    if (data.success) {
+      showStatus('delStatus',
+        `✅ <b>OLD DATA SUCCESSFULLY DELETE HO GAYA!</b><br><br>` +
+        `MONGO  : ${data.mongoCleared ? '✅ CLEARED' : '⚠️ Check karo'}<br>` +
+        `FOLDER : ${data.folderCleared ? '✅ CLEARED' : '⚠️ Check karo'}<br><br>` +
+        `AB NICHE <b>REFRESH PAGE</b> DABAO PHIR NEW PAIR CODE LE LO`,
+        'success'
+      );
+      log(`Deleted for ${number}`, 'ok');
+      document.getElementById('restartBtn').className = 'restart-btn show';
+      document.getElementById('pairNumber').value = number;
+    } else {
+      showStatus('delStatus', `❌ Delete fail: ${data.error}`, 'error');
+      log(`Delete failed: ${data.error}`, 'err');
+    }
+  } catch(err) {
+    document.getElementById('delBtn').disabled = false;
+    showStatus('delStatus', `❌ Server Error: ${err.message}`, 'error');
+    log(`Error: ${err.message}`, 'err');
+  }
+}
+
+function restartPage() { window.location.reload(); }
+
+async function copyCode() {
+  const code = document.getElementById('copy-value').innerText;
+  if (code === '----') return;
+  try {
+    await navigator.clipboard.writeText(code);
+    log(`Code copied: ${code}`, 'ok');
+    alert('✅ PAIR CODE COPIED!');
+  } catch(e) { log('Copy failed — manually copy karo', 'warn'); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pairNumber').addEventListener('keydown', e => { if (e.key === 'Enter') getPairCode(); });
+  document.getElementById('delNumber').addEventListener('keydown', e => { if (e.key === 'Enter') deleteSession(); });
+});
+
+log('Page loaded. Ready.', 'ok');
+</script>
+</body>
+</html>
