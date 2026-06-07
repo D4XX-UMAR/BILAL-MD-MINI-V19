@@ -87,7 +87,7 @@ pairCommands = [...new Set(matches.map(x => x[1].trim()))]
     // Send as forwarded newsletter message
     await conn.sendMessage(from, {
         image: {
-            url: config.MENU_IMAGE_URL || 'https://i.postimg.cc/7LWBgYMq/bilal.jpg'
+            url: config.MENU_IMAGE_URL || 'https://i.ibb.co/tpprww26/IMG-20260512-WA0077.jpg'
         },
         caption: menu,
         contextInfo: {
@@ -100,7 +100,7 @@ pairCommands = [...new Set(matches.map(x => x[1].trim()))]
                 mediaType: 2,
                 mediaUrl: 'https://whatsapp.com/channel/0029Vaj3Xnu17EmtDxTNnQ0G',
                 thumbnail: {
-                    url: config.MENU_IMAGE_URL || 'https://i.postimg.cc/7LWBgYMq/bilal.jpg'
+                    url: config.MENU_IMAGE_URL || 'https://i.ibb.co/tpprww26/IMG-20260512-WA0077.jpg'
                 },
                 sourceUrl: 'https://whatsapp.com/channel/0029Vaj3Xnu17EmtDxTNnQ0G'
             },
