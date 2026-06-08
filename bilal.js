@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 __path = process.cwd()
 const bodyParser = require("body-parser");
-const PORT = process.env.PORT || 10005; 
+const PORT = process.env.PORT || 10007; 
 const pairRoutes = require('./pair');
 
 require('events').EventEmitter.defaultMaxListeners = 500;
